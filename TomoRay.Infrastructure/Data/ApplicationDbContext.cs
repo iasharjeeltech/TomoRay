@@ -19,7 +19,7 @@ namespace TomoRay.Infrastructure.Data
         public DbSet<TaskAssignment> TaskAssignments { get; set; }
         public DbSet<Attendance> Attendances { get; set; }
         public DbSet<WorkTask> WorkTasks { get; set; }
-
+        public DbSet<ChecklistItem> ChecklistItems { get; set; }
 
     }
 }

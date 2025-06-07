@@ -8,12 +8,11 @@ namespace TomoRay.Domain.Entities
 {
     public class ChecklistItem : BaseEntity
     {
-        public Guid TaskId { get; set; }
+        public Guid WorkTaskId { get; set; }  // Change from TaskId
         public string Description { get; set; }
         public bool IsPhotoRequired { get; set; }
 
         // Navigation
-        public Task Task { get; set; }
+        public WorkTask WorkTask { get; set; }  // ✅ Change from Task
     }
-
 }

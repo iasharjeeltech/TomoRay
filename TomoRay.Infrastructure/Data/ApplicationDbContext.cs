@@ -20,6 +20,8 @@ namespace TomoRay.Infrastructure.Data
         public DbSet<Attendance> Attendances { get; set; }
         public DbSet<WorkTask> WorkTasks { get; set; }
         public DbSet<ChecklistItem> ChecklistItems { get; set; }
+        public DbSet<InventoryItem> InventoryItems { get; set; }
+        public DbSet<InventoryAssignment> InventoryAssignments { get; set; }
 
     }
 }

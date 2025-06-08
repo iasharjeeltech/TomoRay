@@ -17,7 +17,7 @@ namespace TomoRay.Domain.Entities
         // Navigation
         public InventoryItem InventoryItem { get; set; }
         public User User { get; set; }
-        public Task Task { get; set; }
+        public WorkTask WorkTask { get; set; }
     }
 
 }

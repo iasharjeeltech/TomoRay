@@ -54,7 +54,17 @@ namespace TomoRay.Infrastructure.Repository
 
         public async Task<User?> GetByEmailAsync(string email)
         {
-            return await _context.Users.FirstOrDefaultAsync(u => u.Email == email);
+            var user = await _context.Users.FirstOrDefaultAsync(u => u.Email.ToLower() == email.ToLower());
+            if (user == null)
+            {
+                Console.WriteLine($"User with email {email} not found.");
+            }
+            else
+            {
+                Console.WriteLine($"User found: {user.Email}");
+            }
+            return user;
         }
+
     }
 }

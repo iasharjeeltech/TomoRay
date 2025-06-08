@@ -12,8 +12,8 @@ using TomoRay.Infrastructure.Data;
 namespace TomoRay.Infrastructure.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20250607131415_user_TA_Atten_wa_cl_TblCreated")]
-    partial class user_TA_Atten_wa_cl_TblCreated
+    [Migration("20250608173719_AllTable_Created")]
+    partial class AllTable_Created
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -34,15 +34,26 @@ namespace TomoRay.Infrastructure.Migrations
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("datetime2");
 
-                    b.Property<string>("LocationCoordinates")
+                    b.Property<string>("Latitude")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<DateTime>("PunchInTime")
+                    b.Property<string>("LocationAddress")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Longitude")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("MarkedAt")
                         .HasColumnType("datetime2");
 
-                    b.Property<string>("SelfieImageUrl")
+                    b.Property<string>("PhotoUrl")
                         .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Remarks")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<DateTime?>("UpdatedAt")
@@ -85,6 +96,72 @@ namespace TomoRay.Infrastructure.Migrations
                     b.HasIndex("WorkTaskId");
 
                     b.ToTable("ChecklistItems");
+                });
+
+            modelBuilder.Entity("TomoRay.Domain.Entities.InventoryAssignment", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<Guid>("InventoryItemId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<int>("QuantityAssigned")
+                        .HasColumnType("int");
+
+                    b.Property<Guid>("TaskId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTime?>("UpdatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<Guid>("UserId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("WorkTaskId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("InventoryItemId");
+
+                    b.HasIndex("UserId");
+
+                    b.HasIndex("WorkTaskId");
+
+                    b.ToTable("InventoryAssignments");
+                });
+
+            modelBuilder.Entity("TomoRay.Domain.Entities.InventoryItem", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("Category")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("QuantityAvailable")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime?>("UpdatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("InventoryItems");
                 });
 
             modelBuilder.Entity("TomoRay.Domain.Entities.TaskAssignment", b =>
@@ -213,6 +290,33 @@ namespace TomoRay.Infrastructure.Migrations
                     b.Navigation("WorkTask");
                 });
 
+            modelBuilder.Entity("TomoRay.Domain.Entities.InventoryAssignment", b =>
+                {
+                    b.HasOne("TomoRay.Domain.Entities.InventoryItem", "InventoryItem")
+                        .WithMany("InventoryAssignments")
+                        .HasForeignKey("InventoryItemId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("TomoRay.Domain.Entities.User", "User")
+                        .WithMany()
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("TomoRay.Domain.Entities.WorkTask", "WorkTask")
+                        .WithMany()
+                        .HasForeignKey("WorkTaskId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("InventoryItem");
+
+                    b.Navigation("User");
+
+                    b.Navigation("WorkTask");
+                });
+
             modelBuilder.Entity("TomoRay.Domain.Entities.TaskAssignment", b =>
                 {
                     b.HasOne("TomoRay.Domain.Entities.User", "User")
@@ -230,6 +334,11 @@ namespace TomoRay.Infrastructure.Migrations
                     b.Navigation("User");
 
                     b.Navigation("WorkTask");
+                });
+
+            modelBuilder.Entity("TomoRay.Domain.Entities.InventoryItem", b =>
+                {
+                    b.Navigation("InventoryAssignments");
                 });
 
             modelBuilder.Entity("TomoRay.Domain.Entities.User", b =>

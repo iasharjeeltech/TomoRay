@@ -1,3 +1,4 @@
+using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.EntityFrameworkCore;
 using TomoRay.Application.Common.Interfaces;
 using TomoRay.Application.Common.Interfaces.Services;
@@ -22,6 +23,14 @@ builder.Services.AddScoped<IWorkTaskService, WorkTaskService>();
 builder.Services.AddScoped<IUserService, UserService>();
 builder.Services.AddScoped<IAttendanceService, AttendanceService>();
 
+builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
+    .AddCookie(options =>
+    {
+        options.LoginPath = "/User/Login";       // Login hone se pehle redirect yahan hoga
+        options.LogoutPath = "/User/Logout";     // Logout hone par
+        options.AccessDeniedPath = "/User/AccessDenied"; // Optional
+    });
+
 
 var app = builder.Build();
 
@@ -38,6 +47,7 @@ app.UseStaticFiles();
 
 app.UseRouting();
 
+app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllerRoute(

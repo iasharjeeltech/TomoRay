@@ -9,12 +9,18 @@ namespace TomoRay.Domain.Entities
     public class Attendance : BaseEntity
     {
         public Guid UserId { get; set; }
-        public DateTime PunchInTime { get; set; }
-        public string LocationCoordinates { get; set; }
-        public string SelfieImageUrl { get; set; }
+        public DateTime MarkedAt { get; set; } = DateTime.Now;
+
+        public string LocationAddress { get; set; } // like "Indore, MP"
+        public string Latitude { get; set; }        // optional but helpful
+        public string Longitude { get; set; }       // optional
+
+        public string PhotoUrl { get; set; }        // saved image path or cloud URL
+        public string? Remarks { get; set; }        // optional notes
 
         // Navigation
         public User User { get; set; }
     }
+
 
 }

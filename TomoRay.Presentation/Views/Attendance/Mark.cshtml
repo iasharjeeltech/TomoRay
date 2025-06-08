@@ -1,0 +1,59 @@
+﻿@model TomoRay.Presentation.Models.MarkAttendanceViewModel
+
+<h2>Mark Attendance</h2>
+
+<form asp-action="Mark" method="post">
+    <input type="hidden" name="UserId" value="@Model.UserId" />
+
+    <video id="video" width="320" height="240" autoplay></video><br />
+    <button type="button" id="capture">📸Capture</button><br />
+    <canvas id="canvas" width="320" height="240" style="display:none;"></canvas>
+
+    <input type="hidden" name="PhotoBase64" id="photoBase64" />
+
+    <input type="hidden" name="Latitude" id="latitude" />
+    <input type="hidden" name="Longitude" id="longitude" />
+    <input type="hidden" name="LocationAddress" id="locationAddress" />
+
+    <div class="form-group mt-2">
+        <label>Remarks (Optional)</label>
+        <textarea name="Remarks" class="form-control"></textarea>
+    </div>
+
+    <button type="submit" class="btn btn-success mt-3">Mark Attendance</button>
+</form>
+
+@section Scripts {
+    <script>
+        const video = document.getElementById('video');
+        const canvas = document.getElementById('canvas');
+        const captureButton = document.getElementById('capture');
+        const photoBase64Input = document.getElementById('photoBase64');
+
+        // Open Camera
+        navigator.mediaDevices.getUserMedia({ video: true })
+            .then(stream => {
+                video.srcObject = stream;
+            });
+
+        // Capture Button
+        captureButton.addEventListener('click', () => {
+            const context = canvas.getContext('2d');
+            canvas.style.display = 'block';
+            context.drawImage(video, 0, 0, canvas.width, canvas.height);
+
+            const base64Image = canvas.toDataURL('image/png');
+            photoBase64Input.value = base64Image;
+        });
+
+        // Fetch Location
+        if (navigator.geolocation) {
+            navigator.geolocation.getCurrentPosition(function (position) {
+                document.getElementById("latitude").value = position.coords.latitude;
+                document.getElementById("longitude").value = position.coords.longitude;
+
+                // Reverse Geocode - optional improvement
+            });
+        }
+    </script>
+}

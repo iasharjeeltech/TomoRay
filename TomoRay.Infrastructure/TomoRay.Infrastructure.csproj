@@ -19,6 +19,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\TomoRay.Application\TomoRay.Application.csproj" />
     <ProjectReference Include="..\TomoRay.Domain\TomoRay.Domain.csproj" />
   </ItemGroup>
 

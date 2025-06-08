@@ -1,5 +1,9 @@
 using Microsoft.EntityFrameworkCore;
+using TomoRay.Application.Common.Interfaces;
+using TomoRay.Application.Common.Interfaces.Services;
 using TomoRay.Infrastructure.Data;
+using TomoRay.Infrastructure.Repository;
+using TomoRay.Infrastructure.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -8,6 +12,14 @@ builder.Services.AddControllersWithViews();
 
 builder.Services.AddDbContext<ApplicationDbContext>(options=>
     options.UseSqlServer(builder.Configuration.GetConnectionString("DbConnection")));
+
+builder.Services.AddScoped<IUserRepository, UserRepository>();
+builder.Services.AddScoped<IWorkTaskRepository, WorkTaskRepository>();
+builder.Services.AddScoped<ITaskAssignmentRepository, TaskAssignmentRepository>();
+builder.Services.AddScoped<IAttendanceRepository, AttendanceRepository>();
+
+builder.Services.AddScoped<IWorkTaskService, WorkTaskService>();
+
 
 var app = builder.Build();
 

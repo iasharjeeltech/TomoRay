@@ -22,7 +22,6 @@
 
     <button type="submit" class="btn btn-success mt-3">Mark Attendance</button>
 </form>
-
 @section Scripts {
     <script>
         const video = document.getElementById('video');
@@ -36,24 +35,42 @@
                 video.srcObject = stream;
             });
 
-        // Capture Button
+        // Location variables
+        let latitude = "";
+        let longitude = "";
+
+        // Fetch Location
+        if (navigator.geolocation) {
+            navigator.geolocation.getCurrentPosition(function (position) {
+                latitude = position.coords.latitude.toFixed(4);
+                longitude = position.coords.longitude.toFixed(4);
+
+                document.getElementById("latitude").value = latitude;
+                document.getElementById("longitude").value = longitude;
+                document.getElementById("locationAddress").value = `${latitude}, ${longitude}`;
+            });
+        }
+
+        // Capture Button with watermark logic
         captureButton.addEventListener('click', () => {
             const context = canvas.getContext('2d');
             canvas.style.display = 'block';
             context.drawImage(video, 0, 0, canvas.width, canvas.height);
 
+            // 🕒 Current date and time
+            const now = new Date();
+            const dateTime = now.toLocaleString();
+
+            // 🖋 Add watermark text
+            const watermarkText = `📍 ${latitude}, ${longitude}  ⏰ ${dateTime}`;
+            context.font = '16px Arial';
+            context.fillStyle = 'white';
+            context.fillText(watermarkText, 10, canvas.height - 10);
+
+            // 💾 Save photo
             const base64Image = canvas.toDataURL('image/png');
             photoBase64Input.value = base64Image;
         });
-
-        // Fetch Location
-        if (navigator.geolocation) {
-            navigator.geolocation.getCurrentPosition(function (position) {
-                document.getElementById("latitude").value = position.coords.latitude;
-                document.getElementById("longitude").value = position.coords.longitude;
-
-                // Reverse Geocode - optional improvement
-            });
-        }
     </script>
 }
+

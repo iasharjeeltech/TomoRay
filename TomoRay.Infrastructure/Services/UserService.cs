@@ -36,10 +36,11 @@ namespace TomoRay.Infrastructure.Services
 
         public async Task RegisterAsync(User user, string password)
         {
-            // simple password hash logic (for demo; use Identity in real projects)
             user.PasswordHash = BCrypt.Net.BCrypt.HashPassword(password);
+            Console.WriteLine($"Password hashed: {user.PasswordHash}");
             await _userRepo.AddAsync(user);
         }
+
 
         public async Task<User?> LoginAsync(string email, string password)
         {

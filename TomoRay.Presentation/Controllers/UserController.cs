@@ -86,10 +86,10 @@ namespace TomoRay.Presentation.Controllers
             {
                 Id = Guid.NewGuid(),
                 FullName = model.FullName,
-                Email = model.Email,
+                Email = model.Email.ToLower(),
                 PhoneNumber = model.PhoneNumber,
                 Role = UserRole.Staff,
-                IsApproved = false
+                IsApproved = true
             };
 
             await _userService.RegisterAsync(user, model.Password);
@@ -111,21 +111,27 @@ namespace TomoRay.Presentation.Controllers
             if (!ModelState.IsValid)
                 return View(model);
 
-            var user = await _userService.LoginAsync(model.Email, model.Password);
+            var user = await _userService.LoginAsync(model.Email.ToLower(), model.Password);
+
             if (user == null)
             {
+                Console.WriteLine("Login failed for email: " + model.Email);
                 ModelState.AddModelError(string.Empty, "Invalid credentials or user not registered.");
                 return View(model);
             }
+            else
+            {
+                Console.WriteLine("Login success for email: " + model.Email);
+            }
+
 
             // Sign-in logic
             var claims = new List<Claim>
-    {
-        new Claim(ClaimTypes.NameIdentifier, user.Id.ToString()),
-        new Claim(ClaimTypes.Name, user.FullName),
-        new Claim(ClaimTypes.Role, user.Role.ToString())
-    };
-
+                {
+                    new Claim(ClaimTypes.NameIdentifier, user.Id.ToString()),
+                    new Claim(ClaimTypes.Name, user.FullName),
+                    new Claim(ClaimTypes.Role, user.Role.ToString())
+                };
             var identity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
             var principal = new ClaimsPrincipal(identity);
 

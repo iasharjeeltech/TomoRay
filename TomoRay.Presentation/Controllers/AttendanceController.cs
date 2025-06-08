@@ -4,6 +4,7 @@ using TomoRay.Application.Common.Interfaces.Services;
 using TomoRay.Domain.Entities;
 using TomoRay.Presentation.Models;
 using System.Text.RegularExpressions;
+using System.Security.Claims;
 
 namespace TomoRay.Presentation.Controllers
 {
@@ -27,7 +28,6 @@ namespace TomoRay.Presentation.Controllers
             return View(model); // pass model here
         }
 
-
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Mark(MarkAttendanceViewModel model)
@@ -49,9 +49,12 @@ namespace TomoRay.Presentation.Controllers
             byte[] imageBytes = Convert.FromBase64String(base64Data);
             System.IO.File.WriteAllBytes(filePath, imageBytes);
 
+            // 🟢 Authenticated user ka ID lena
+            Guid userId = Guid.Parse(User.FindFirst(ClaimTypes.NameIdentifier).Value);
+
             var attendance = new Attendance
             {
-                UserId = model.UserId,
+                UserId = userId, // 🔥 Yehi sahi hai
                 MarkedAt = DateTime.Now,
                 LocationAddress = model.LocationAddress ?? $"{model.Latitude}, {model.Longitude}",
                 Latitude = model.Latitude,
@@ -63,8 +66,9 @@ namespace TomoRay.Presentation.Controllers
             await _attendanceService.MarkAttendanceAsync(attendance);
 
             TempData["Success"] = "Attendance marked successfully!";
-            return RedirectToAction("Index");
+            return RedirectToAction("Mark");
         }
+
 
         // GET: Attendance/Index (optional - to list all records)
         [HttpGet]

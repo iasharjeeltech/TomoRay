@@ -5,6 +5,7 @@ using TomoRay.Domain.Entities;
 using TomoRay.Presentation.Models;
 using System.Text.RegularExpressions;
 using System.Security.Claims;
+using TomoRay.Application.Common.Interfaces;
 
 namespace TomoRay.Presentation.Controllers
 {
@@ -12,13 +13,17 @@ namespace TomoRay.Presentation.Controllers
     {
         private readonly IAttendanceService _attendanceService;
         private readonly IWebHostEnvironment _webHostEnvironment;
+        private readonly IAttendanceRepository _attendanceRepository;
 
         public AttendanceController(
             IAttendanceService attendanceService,
-            IWebHostEnvironment webHostEnvironment)
+            IWebHostEnvironment webHostEnvironment,
+            IAttendanceRepository attendanceRepository)
         {
             _attendanceService = attendanceService;
             _webHostEnvironment = webHostEnvironment;
+            _attendanceRepository = attendanceRepository;
+
         }
 
         [HttpGet]
@@ -52,6 +57,8 @@ namespace TomoRay.Presentation.Controllers
             // 🟢 Authenticated user ka ID lena
             Guid userId = Guid.Parse(User.FindFirst(ClaimTypes.NameIdentifier).Value);
 
+
+            //replace this with mapping in future!
             var attendance = new Attendance
             {
                 UserId = userId, // 🔥 Yehi sahi hai
@@ -65,7 +72,7 @@ namespace TomoRay.Presentation.Controllers
 
             await _attendanceService.MarkAttendanceAsync(attendance);
 
-            TempData["Success"] = "Attendance marked successfully!";
+            TempData["Success"] = "Attendance Marked Successfully!";
             return RedirectToAction("Mark");
         }
 

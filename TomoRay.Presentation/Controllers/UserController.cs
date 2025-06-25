@@ -137,7 +137,18 @@ namespace TomoRay.Presentation.Controllers
 
             await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, principal);
 
-            return RedirectToAction("Index", "Home");
+            // ⭐ Redirect based on role
+            switch (user.Role)
+            {
+                case UserRole.Admin:
+                    return RedirectToAction("Dashboard", "Admin");
+                case UserRole.Supervisor:
+                    return RedirectToAction("Dashboard", "Supervisor");
+                case UserRole.Staff:
+                    return RedirectToAction("Dashboard", "Staff");
+                default:
+                    return RedirectToAction("Index", "Home");
+            }
         }
 
 

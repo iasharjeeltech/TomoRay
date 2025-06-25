@@ -1,40 +1,91 @@
 ﻿@model RegisterUserViewModel
 @{
+    // Layout = "~/Views/Shared/_AuthLayout.cshtml";
     ViewData["Title"] = "Register";
 }
 
-<h2>Register</h2>
+<style>
+    .auth-container {
+        max-width: 500px;
+        margin: 4rem auto;
+        padding: 2.5rem;
+        background: #fff;
+        border-radius: 16px;
+        box-shadow: 0 0 25px rgba(0, 0, 0, 0.05);
+    }
 
-<form asp-action="Register" method="post">
-    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+    .auth-container h2 {
+        font-weight: 600;
+        text-align: center;
+        margin-bottom: 2rem;
+    }
 
-    <div class="mb-3">
-        <label asp-for="FullName" class="form-label"></label>
-        <input asp-for="FullName" class="form-control" />
-        <span asp-validation-for="FullName" class="text-danger"></span>
-    </div>
+    body {
+        background: #f5f7fa;
+    }
 
-    <div class="mb-3">
-        <label asp-for="Email" class="form-label"></label>
-        <input asp-for="Email" class="form-control" />
-        <span asp-validation-for="Email" class="text-danger"></span>
-    </div>
+    .form-label {
+        font-weight: 500;
+    }
 
-    <div class="mb-3">
-        <label asp-for="PhoneNumber" class="form-label"></label>
-        <input asp-for="PhoneNumber" class="form-control" />
-        <span asp-validation-for="PhoneNumber" class="text-danger"></span>
-    </div>
+    .btn-primary {
+        width: 100%;
+        padding: 0.6rem;
+        font-weight: 500;
+        border-radius: 8px;
+    }
 
-    <div class="mb-3">
-        <label asp-for="Password" class="form-label"></label>
-        <input asp-for="Password" class="form-control" />
-        <span asp-validation-for="Password" class="text-danger"></span>
-    </div>
+    .form-control {
+        border-radius: 10px;
+        padding: 0.55rem 0.75rem;
+    }
 
-    <button type="submit" class="btn btn-primary">Register</button>
-    <p class="mt-2">Already have an account? <a asp-controller="User" asp-action="Login">Login here</a></p>
-</form>
+    .alt-login {
+        text-align: center;
+        margin-top: 1.2rem;
+    }
+</style>
+
+<div class="auth-container">
+    <h2>Register</h2>
+
+    <form asp-action="Register" method="post" novalidate>
+        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+        <div class="mb-3">
+            <label asp-for="FullName" class="form-label"></label>
+            <input asp-for="FullName" class="form-control" />
+            <span asp-validation-for="FullName" class="text-danger"></span>
+        </div>
+
+        <div class="mb-3">
+            <label asp-for="Email" class="form-label"></label>
+            <input asp-for="Email" class="form-control" />
+            <span asp-validation-for="Email" class="text-danger"></span>
+        </div>
+
+        <div class="mb-3">
+            <label asp-for="PhoneNumber" class="form-label"></label>
+            <input asp-for="PhoneNumber" class="form-control" />
+            <span asp-validation-for="PhoneNumber" class="text-danger"></span>
+        </div>
+
+        <div class="mb-3">
+            <label asp-for="Password" class="form-label"></label>
+            <input asp-for="Password" class="form-control" type="password" />
+            <span asp-validation-for="Password" class="text-danger"></span>
+        </div>
+
+        <button type="submit" class="btn btn-primary mt-2">Create Account</button>
+
+        <div class="alt-login">
+            <p class="mt-3">
+                Already have an account?
+                <a asp-controller="User" asp-action="Login" class="link-primary fw-semibold">Login here</a>
+            </p>
+        </div>
+    </form>
+</div>
 
 @section Scripts {
     <partial name="_ValidationScriptsPartial" />

@@ -22,12 +22,20 @@
 
     <button type="submit" class="btn btn-success mt-3">Mark Attendance</button>
 </form>
+
 @section Scripts {
     <script>
         const video = document.getElementById('video');
         const canvas = document.getElementById('canvas');
         const captureButton = document.getElementById('capture');
         const photoBase64Input = document.getElementById('photoBase64');
+        const latitudeInput = document.getElementById("latitude");
+        const longitudeInput = document.getElementById("longitude");
+        const locationAddressInput = document.getElementById("locationAddress");
+
+        let latitude = "";
+        let longitude = "";
+        let locationName = "";
 
         // Open Camera
         navigator.mediaDevices.getUserMedia({ video: true })
@@ -35,42 +43,48 @@
                 video.srcObject = stream;
             });
 
-        // Location variables
-        let latitude = "";
-        let longitude = "";
-
         // Fetch Location
         if (navigator.geolocation) {
-            navigator.geolocation.getCurrentPosition(function (position) {
+            navigator.geolocation.getCurrentPosition(async function (position) {
                 latitude = position.coords.latitude.toFixed(4);
                 longitude = position.coords.longitude.toFixed(4);
 
-                document.getElementById("latitude").value = latitude;
-                document.getElementById("longitude").value = longitude;
-                document.getElementById("locationAddress").value = `${latitude}, ${longitude}`;
+                latitudeInput.value = latitude;
+                longitudeInput.value = longitude;
+
+                // 🔁 Reverse Geocoding using Nominatim API
+                const response = await fetch(`https://nominatim.openstreetmap.org/reverse?format=jsonv2&lat=${latitude}&lon=${longitude}`);
+                const data = await response.json();
+
+                locationName = data.address.city || data.address.town || data.address.village || data.display_name || "Unknown Location";
+
+                locationAddressInput.value = locationName; // Save for DB
             });
         }
 
-        // Capture Button with watermark logic
+        // Capture with Location Name + Time
         captureButton.addEventListener('click', () => {
             const context = canvas.getContext('2d');
             canvas.style.display = 'block';
             context.drawImage(video, 0, 0, canvas.width, canvas.height);
 
-            // 🕒 Current date and time
             const now = new Date();
             const dateTime = now.toLocaleString();
 
-            // 🖋 Add watermark text
-            const watermarkText = `📍 ${latitude}, ${longitude}  ⏰ ${dateTime}`;
+            const watermarkText = `📍 ${locationName}  ⏰ ${dateTime}`;
             context.font = '16px Arial';
             context.fillStyle = 'white';
+            context.strokeStyle = "black";
+            context.lineWidth = 2;
+            context.strokeText(watermarkText, 10, canvas.height - 10);
             context.fillText(watermarkText, 10, canvas.height - 10);
 
-            // 💾 Save photo
             const base64Image = canvas.toDataURL('image/png');
             photoBase64Input.value = base64Image;
         });
     </script>
+}
+
+
 }
 

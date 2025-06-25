@@ -16,3 +16,4 @@ namespace TomoRay.Domain.Entities
     }
 
 }
+.

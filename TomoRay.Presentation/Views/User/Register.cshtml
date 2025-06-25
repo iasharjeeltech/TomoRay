@@ -1,4 +1,5 @@
-﻿@model RegisterUserViewModel
+﻿@using TomoRay.Domain.Static
+@model RegisterUserViewModel
 @{
     // Layout = "~/Views/Shared/_AuthLayout.cshtml";
     ViewData["Title"] = "Register";
@@ -69,6 +70,13 @@
             <input asp-for="PhoneNumber" class="form-control" />
             <span asp-validation-for="PhoneNumber" class="text-danger"></span>
         </div>
+
+        <div class="mb-3">
+            <label asp-for="Role" class="form-label"></label>
+            <select asp-for="Role" class="form-control" asp-items="Html.GetEnumSelectList<UserRole>()"></select>
+            <span asp-validation-for="Role" class="text-danger"></span>
+        </div>
+
 
         <div class="mb-3">
             <label asp-for="Password" class="form-label"></label>

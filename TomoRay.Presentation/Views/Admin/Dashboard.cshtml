@@ -1,0 +1,6 @@
+﻿@{
+    ViewData["Title"] = "Admin Dashboard";
+}
+
+<h2>Welcome, @User.Identity.Name!</h2>
+<p>You are logged in as: @User.FindFirst("http://schemas.microsoft.com/ws/2008/06/identity/claims/role")?.Value</p>

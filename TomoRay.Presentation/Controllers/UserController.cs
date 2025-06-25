@@ -88,7 +88,7 @@ namespace TomoRay.Presentation.Controllers
                 FullName = model.FullName,
                 Email = model.Email.ToLower(),
                 PhoneNumber = model.PhoneNumber,
-                Role = UserRole.Staff,
+                Role = model.Role,
                 IsApproved = true
             };
 

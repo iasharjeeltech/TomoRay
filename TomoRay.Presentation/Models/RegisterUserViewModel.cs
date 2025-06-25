@@ -1,9 +1,13 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using TomoRay.Domain.Static;
 
 namespace TomoRay.Presentation.Models
 {
     public class RegisterUserViewModel
     {
+        [Required]
+        public UserRole Role { get; set; }
+
         [Required]
         public string FullName { get; set; } // 👈 Rename Name → FullName
 

@@ -1,0 +1,25 @@
+﻿@model AdminDashboardViewModel
+
+<h2>Admin Dashboard</h2>
+
+<div>
+    <p><strong>Total Users:</strong> @Model.TotalUsers</p>
+    <p><strong>Total Supervisors:</strong> @Model.TotalSupervisors</p>
+    <p><strong>Total Staff:</strong> @Model.TotalStaff</p>
+</div>
+
+<h4>Unapproved Users</h4>
+<ul>
+    @foreach (var user in Model.UnapprovedUsers)
+    {
+        <li>@user.FullName (@user.Email)</li>
+    }
+</ul>
+
+<h4>Recent Users</h4>
+<ul>
+    @foreach (var user in Model.RecentUsers)
+    {
+        <li>@user.FullName - @user.CreatedAt.ToLocalTime()</li>
+    }
+</ul>

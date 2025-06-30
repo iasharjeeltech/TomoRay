@@ -11,29 +11,16 @@ using TomoRay.Infrastructure.Data;
 namespace TomoRay.Infrastructure.Repository
 {
 
-    public class WorkTaskRepository : IWorkTaskRepository
+    public class WorkTaskRepository : Repository<WorkTask>, IWorkTaskRepository
     {
         private readonly ApplicationDbContext _context;
-        public WorkTaskRepository(ApplicationDbContext context)
+        public WorkTaskRepository(ApplicationDbContext context) : base(context)
         {
             _context = context;
         }
 
-        public async Task<IEnumerable<WorkTask>> GetAllAsync()
+        public async Task SaveAsync()
         {
-            return await _context.WorkTasks.Include(t => t.TaskAssignments).ToListAsync();
-        }
-
-        public async Task<WorkTask?> GetByIdAsync(Guid id)
-        {
-            return await _context.WorkTasks
-                .Include(t => t.TaskAssignments)
-                .FirstOrDefaultAsync(t => t.Id == id);
-        }
-
-        public async Task AddAsync(WorkTask task)
-        {
-            await _context.WorkTasks.AddAsync(task);
             await _context.SaveChangesAsync();
         }
 
@@ -41,16 +28,6 @@ namespace TomoRay.Infrastructure.Repository
         {
             _context.WorkTasks.Update(task);
             await _context.SaveChangesAsync();
-        }
-
-        public async Task DeleteAsync(Guid id)
-        {
-            var task = await _context.WorkTasks.FindAsync(id);
-            if (task != null)
-            {
-                _context.WorkTasks.Remove(task);
-                await _context.SaveChangesAsync();
-            }
         }
     }
 }

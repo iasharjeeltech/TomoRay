@@ -72,7 +72,7 @@ namespace TomoRay.Presentation.Controllers
 
             await _attendanceService.MarkAttendanceAsync(attendance);
 
-            TempData["Success"] = "Attendance Marked Successfully!";
+          TempData["Success"] = "Attendance Marked Successfully!";
             return RedirectToAction("Mark");
         }
 

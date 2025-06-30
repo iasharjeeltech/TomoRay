@@ -1,13 +1,20 @@
-﻿namespace TomoRay.Presentation.Models
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace TomoRay.Presentation.Models
 {
-    // Presentation > Models > MarkAttendanceViewModel.cs
     public class MarkAttendanceViewModel
     {
         public Guid UserId { get; set; }
-        public string PhotoBase64 { get; set; }         // from canvas
-        public string LocationAddress { get; set; }
-        public string Latitude { get; set; }
-        public string Longitude { get; set; }
+
+        public string? PhotoBase64 { get; set; } // Base64 from canvas (not IFormFile)
+        public string LocationAddress { get; set; } = string.Empty;
+        public string Latitude { get; set; } = string.Empty;
+        public string Longitude { get; set; } = string.Empty;
+
         public string? Remarks { get; set; }
     }
 

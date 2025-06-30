@@ -7,12 +7,9 @@ using TomoRay.Domain.Entities;
 
 namespace TomoRay.Application.Common.Interfaces
 {
-    public interface IAttendanceRepository
+    public interface IAttendanceRepository : IRepository<Attendance>
     {
-        Task<IEnumerable<Attendance>> GetAllAsync();
-        Task<Attendance?> GetByIdAsync(Guid id);
-        Task AddAsync(Attendance attendance);
         Task UpdateAsync(Attendance attendance);
-        Task DeleteAsync(Guid id);
+        Task SaveAsync();
     }
 }

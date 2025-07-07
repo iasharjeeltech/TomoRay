@@ -7,12 +7,9 @@ using TomoRay.Domain.Entities;
 
 namespace TomoRay.Application.Common.Interfaces.Services
 {
-    public interface IWorkTaskService
+    public interface IWorkTaskService : IRepository<WorkTask>
     {
-        Task<IEnumerable<WorkTask>> GetAllAsync();
-        Task<WorkTask?> GetByIdAsync(Guid id);
-        Task CreateAsync(WorkTask task);
         Task UpdateAsync(WorkTask task);
-        Task DeleteAsync(Guid id);
+        Task SaveAsync();
     }
 }

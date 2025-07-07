@@ -12,7 +12,11 @@ namespace TomoRay.Application.Common.Interfaces
         Task<IEnumerable<T>> GetAllAsync(Expression<Func<T, bool>>? filter = null, string? includeProperties = null);
 
         Task<T?> GetByIdAsync(Expression<Func<T, bool>> filter, string? includeProperties = null);
+
+        Task<T?> GetByIdAsync(Guid id); // ✅ ADDED: Overload for FindAsync using primary key
+
         Task AddAsync(T entity);
+
         Task DeleteAsync(Guid id);
     }
 }

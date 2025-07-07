@@ -6,21 +6,23 @@ using TomoRay.Application.Common.Interfaces.Services;
 using TomoRay.Domain.Entities;
 using TomoRay.Domain.Static;
 using TomoRay.Presentation.Models;
+using TomoRay.Application.Common.Interfaces;
+using TomoRay.Infrastructure.Repository;
 
 namespace TomoRay.Presentation.Controllers
 {
     public class UserController : Controller
         {
-        private readonly IUserService _userService;
+        private readonly IUnitOfWork _unitOfWork;
 
-        public UserController(IUserService userService)
+        public UserController(IUnitOfWork unitOfWork)
         {
-            _userService = userService;
+            _unitOfWork = unitOfWork;
         }
 
         public async Task<IActionResult> Index()
         {
-            var users = await _userService.GetAllAsync();
+            var users = await _unitOfWork.UserServiceUOW.GetAllAsync();
             return View(users);
         }
 
@@ -34,7 +36,7 @@ namespace TomoRay.Presentation.Controllers
         {
             if (ModelState.IsValid)
             {
-                await _userService.AddAsync(user);
+                await _unitOfWork.UserServiceUOW.AddAsync(user);
                 return RedirectToAction("Index");
             }
             return View(user);
@@ -42,7 +44,7 @@ namespace TomoRay.Presentation.Controllers
 
         public async Task<IActionResult> Edit(Guid id)
         {
-            var user = await _userService.GetByIdAsync(u => u.Id == id);
+            var user = await _unitOfWork.UserServiceUOW.GetByIdAsync(u => u.Id == id);
             return View(user);
         }
 
@@ -51,7 +53,7 @@ namespace TomoRay.Presentation.Controllers
         {
             if (ModelState.IsValid)
             {
-                await _userService.UpdateUserAsync(user);
+                await _unitOfWork.UserServiceUOW.UpdateUserAsync(user);
                 return RedirectToAction("Index");
             }
             return View(user);
@@ -59,14 +61,14 @@ namespace TomoRay.Presentation.Controllers
 
         public async Task<IActionResult> Delete(Guid id)
         {
-            var user = await _userService.GetByIdAsync(u => u.Id == id);
+            var user = await _unitOfWork.UserServiceUOW.GetByIdAsync(u => u.Id == id);
             return View(user);
         }
 
         [HttpPost, ActionName("Delete")]
         public async Task<IActionResult> DeleteConfirmed(Guid id)
         {
-            await _userService.DeleteAsync(id);
+            await _unitOfWork.UserServiceUOW.DeleteAsync(id);
             return RedirectToAction("Index");
         }
 
@@ -92,7 +94,7 @@ namespace TomoRay.Presentation.Controllers
                 IsApproved = true
             };
 
-            await _userService.RegisterAsync(user, model.Password);
+            await _unitOfWork.UserServiceUOW.RegisterAsync(user, model.Password);
 
             TempData["Success"] = "Registration successful! Please login.";
             return RedirectToAction("Login");
@@ -111,7 +113,7 @@ namespace TomoRay.Presentation.Controllers
             if (!ModelState.IsValid)
                 return View(model);
 
-            var user = await _userService.LoginAsync(model.Email.ToLower(), model.Password);
+            var user = await _unitOfWork.UserServiceUOW.LoginAsync(model.Email.ToLower(), model.Password);
 
             if (user == null)
             {

@@ -6,31 +6,21 @@ using System.Threading.Tasks;
 using TomoRay.Application.Common.Interfaces.Services;
 using TomoRay.Application.Common.Interfaces;
 using TomoRay.Domain.Entities;
+using TomoRay.Infrastructure.Repository;
+using TomoRay.Infrastructure.Data;
+using Microsoft.EntityFrameworkCore;
 
 namespace TomoRay.Infrastructure.Services
 {
-    public class WorkTaskService : IWorkTaskService
+    public class WorkTaskService : Repository<WorkTask>, IWorkTaskService
     {
         private readonly IWorkTaskRepository _repository;
+        private readonly ApplicationDbContext _db;
 
-        public WorkTaskService(IWorkTaskRepository repository)
+        public WorkTaskService(IWorkTaskRepository repository, ApplicationDbContext db) : base(db)
         {
+            _db = db;
             _repository = repository;
-        }
-
-        public async Task<IEnumerable<WorkTask>> GetAllAsync()
-        {
-            return await _repository.GetAllAsync();
-        }
-
-        public async Task<WorkTask?> GetByIdAsync(Guid id)
-        {
-            return await _repository.GetByIdAsync(id);
-        }
-
-        public async Task CreateAsync(WorkTask task)
-        {
-            await _repository.AddAsync(task);
         }
 
         public async Task UpdateAsync(WorkTask task)
@@ -38,9 +28,9 @@ namespace TomoRay.Infrastructure.Services
             await _repository.UpdateAsync(task);
         }
 
-        public async Task DeleteAsync(Guid id)
+        public async Task SaveAsync()
         {
-            await _repository.DeleteAsync(id);
+           await _db.SaveChangesAsync();
         }
     }
 }

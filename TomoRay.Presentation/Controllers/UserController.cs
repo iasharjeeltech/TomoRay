@@ -20,7 +20,7 @@ namespace TomoRay.Presentation.Controllers
 
         public async Task<IActionResult> Index()
         {
-            var users = await _userService.GetAllUsersAsync();
+            var users = await _userService.GetAllAsync();
             return View(users);
         }
 
@@ -34,7 +34,7 @@ namespace TomoRay.Presentation.Controllers
         {
             if (ModelState.IsValid)
             {
-                await _userService.CreateUserAsync(user);
+                await _userService.AddAsync(user);
                 return RedirectToAction("Index");
             }
             return View(user);
@@ -42,7 +42,7 @@ namespace TomoRay.Presentation.Controllers
 
         public async Task<IActionResult> Edit(Guid id)
         {
-            var user = await _userService.GetUserByIdAsync(id);
+            var user = await _userService.GetByIdAsync(u => u.Id == id);
             return View(user);
         }
 
@@ -59,14 +59,14 @@ namespace TomoRay.Presentation.Controllers
 
         public async Task<IActionResult> Delete(Guid id)
         {
-            var user = await _userService.GetUserByIdAsync(id);
+            var user = await _userService.GetByIdAsync(u => u.Id == id);
             return View(user);
         }
 
         [HttpPost, ActionName("Delete")]
         public async Task<IActionResult> DeleteConfirmed(Guid id)
         {
-            await _userService.DeleteUserAsync(id);
+            await _userService.DeleteAsync(id);
             return RedirectToAction("Index");
         }
 

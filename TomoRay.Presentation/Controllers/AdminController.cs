@@ -19,7 +19,7 @@ namespace TomoRay.Presentation.Controllers
 
         public async Task<IActionResult> Dashboard()
         {
-            var users = await _userService.GetAllUsersAsync();
+            var users = await _userService.GetAllAsync();
 
             var model = new AdminDashboardViewModel
             {

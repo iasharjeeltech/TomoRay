@@ -7,32 +7,25 @@ using TomoRay.Application.Common.Interfaces.Services;
 using TomoRay.Application.Common.Interfaces;
 using TomoRay.Domain.Entities;
 using TomoRay.Infrastructure.Repository;
+using TomoRay.Infrastructure.Data;
+using System.Linq.Expressions;
 
 namespace TomoRay.Infrastructure.Services
 {
-    public class UserService : IUserService
+    public class UserService : Repository<User>, IUserService
     {
         private readonly IUserRepository _userRepo;
+        private readonly ApplicationDbContext _db;
 
-        public UserService(IUserRepository userRepo)
+        public UserService(IUserRepository userRepo, ApplicationDbContext db) : base(db)
         {
+            _db = db;
             _userRepo = userRepo;
         }
 
-        public async Task<User> GetUserByIdAsync(Guid id) =>
-            await _userRepo.GetByIdAsync(id);
-
-        public async Task<IEnumerable<User>> GetAllUsersAsync() =>
-            await _userRepo.GetAllAsync();
-
-        public async Task CreateUserAsync(User user) =>
-            await _userRepo.AddAsync(user);
 
         public async Task UpdateUserAsync(User user) =>
             await _userRepo.UpdateAsync(user);
-
-        public async Task DeleteUserAsync(Guid id) =>
-            await _userRepo.DeleteAsync(id);
 
         public async Task RegisterAsync(User user, string password)
         {
@@ -55,7 +48,10 @@ namespace TomoRay.Infrastructure.Services
             return user;
         }
 
-
+        public  async Task SaveAsync()
+        {
+            await _db.SaveChangesAsync();
+        }
     }
 
 

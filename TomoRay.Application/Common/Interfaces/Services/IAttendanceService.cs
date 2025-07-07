@@ -7,9 +7,8 @@ using TomoRay.Domain.Entities;
 
 namespace TomoRay.Application.Common.Interfaces.Services
 {
-    public interface IAttendanceService
+    public interface IAttendanceService : IRepository<Attendance>
     {
         Task MarkAttendanceAsync(Attendance attendance);
-        Task<IEnumerable<Attendance>> GetAllAsync();
     }
 }

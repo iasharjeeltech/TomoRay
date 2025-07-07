@@ -11,18 +11,13 @@ namespace TomoRay.Presentation.Controllers
 {
     public class AttendanceController : Controller
     {
-        private readonly IAttendanceService _attendanceService;
         private readonly IWebHostEnvironment _webHostEnvironment;
-        private readonly IAttendanceRepository _attendanceRepository;
+        private readonly IUnitOfWork _unitOfWork;
 
-        public AttendanceController(
-            IAttendanceService attendanceService,
-            IWebHostEnvironment webHostEnvironment,
-            IAttendanceRepository attendanceRepository)
+        public AttendanceController(IWebHostEnvironment webHostEnvironment,IUnitOfWork unitOfWork)
         {
-            _attendanceService = attendanceService;
             _webHostEnvironment = webHostEnvironment;
-            _attendanceRepository = attendanceRepository;
+            _unitOfWork = unitOfWork;
 
         }
 
@@ -70,7 +65,7 @@ namespace TomoRay.Presentation.Controllers
                 Remarks = model.Remarks
             };
 
-            await _attendanceService.MarkAttendanceAsync(attendance);
+            await _unitOfWork.AttendanceServiceUOW.MarkAttendanceAsync(attendance);
 
           TempData["Success"] = "Attendance Marked Successfully!";
             return RedirectToAction("Mark");
@@ -81,7 +76,7 @@ namespace TomoRay.Presentation.Controllers
         [HttpGet]
         public async Task<IActionResult> Index()
         {
-            var list = await _attendanceService.GetAllAsync();
+            var list = await _unitOfWork.AttendanceServiceUOW.GetAllAsync();
             return View(list);
         }
     }

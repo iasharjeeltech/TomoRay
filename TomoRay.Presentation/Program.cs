@@ -14,14 +14,7 @@ builder.Services.AddControllersWithViews();
 builder.Services.AddDbContext<ApplicationDbContext>(options=>
     options.UseSqlServer(builder.Configuration.GetConnectionString("DbConnection")));
 
-builder.Services.AddScoped<IUserRepository, UserRepository>();
-builder.Services.AddScoped<IWorkTaskRepository, WorkTaskRepository>();
-builder.Services.AddScoped<ITaskAssignmentRepository, TaskAssignmentRepository>();
-builder.Services.AddScoped<IAttendanceRepository, AttendanceRepository>();
-
-builder.Services.AddScoped<IWorkTaskService, WorkTaskService>();
-builder.Services.AddScoped<IUserService, UserService>();
-builder.Services.AddScoped<IAttendanceService, AttendanceService>();
+builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
 
 builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
     .AddCookie(options =>

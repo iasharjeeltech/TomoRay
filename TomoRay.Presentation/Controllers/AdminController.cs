@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Linq;
+using TomoRay.Application.Common.Interfaces;
 using TomoRay.Application.Common.Interfaces.Services;
 using TomoRay.Domain.Static;
 using TomoRay.Presentation.Models.Admin;
@@ -10,16 +11,16 @@ namespace TomoRay.Presentation.Controllers
     [Authorize(Roles = "Admin")]
     public class AdminController : Controller
     {
-        private readonly IUserService _userService;
+        private readonly IUnitOfWork _unitOfWork;
 
-        public AdminController(IUserService userService)
+        public AdminController(IUnitOfWork unitOfWork)
         {
-            _userService = userService;
+            _unitOfWork = unitOfWork;
         }
 
         public async Task<IActionResult> Dashboard()
         {
-            var users = await _userService.GetAllAsync();
+            var users = await _unitOfWork.UserServiceUOW.GetAllAsync();
 
             var model = new AdminDashboardViewModel
             {

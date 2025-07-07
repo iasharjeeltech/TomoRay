@@ -65,10 +65,12 @@ namespace TomoRay.Infrastructure.Repository
             if (!string.IsNullOrWhiteSpace(includeProperties))
             {
                 foreach (var includeProp in includeProperties
-                             .Split(new[] { ',', '_', '-', ' ' }, StringSplitOptions.RemoveEmptyEntries))
+                    .Split(new[] { ',', '_', '-', ' ' }, StringSplitOptions.RemoveEmptyEntries)
+                    .Select(p => p.Trim()))
                 {
                     query = query.Include(includeProp);
                 }
+
             }
 
             return await query.FirstOrDefaultAsync();

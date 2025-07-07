@@ -9,8 +9,10 @@ namespace TomoRay.Application.Common.Interfaces
 {
     public interface IUserRepository : IRepository<User>
     {
+        Task<User?> GetByEmailAsync(string email);
         Task UpdateAsync(User user);
-        Task<User?> GetByEmailAsync(string email); // extra method example
-        Task SaveAsync(); 
+        Task SaveAsync();
     }
+
 }
+

@@ -13,10 +13,12 @@ namespace TomoRay.Application.Common.Interfaces
         public ITaskAssignmentRepository TaskAssignmentRepositoryUOW { get; }
         public IUserRepository UserRepositoryUOW { get; }
         public IWorkTaskRepository WorkTaskRepositoryUOW { get; }
+        Task SaveAsync();
 
         //service repo
         public IWorkTaskService WorkTaskServiceUOW { get; }    
         public IUserService UserServiceUOW { get; }
         public IAttendanceService AttendanceServiceUOW { get; }
+
     }
 }

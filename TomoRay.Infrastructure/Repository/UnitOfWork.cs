@@ -27,6 +27,7 @@ namespace TomoRay.Infrastructure.Repository
 
         public IAttendanceService AttendanceServiceUOW { get; private set; }
 
+
         public UnitOfWork(ApplicationDbContext db)
         {
             _db = db;
@@ -41,5 +42,9 @@ namespace TomoRay.Infrastructure.Repository
             AttendanceServiceUOW = new AttendanceService(AttendanceRepositoryUOW, _db);
         }
 
+        public async Task SaveAsync()
+        {
+            await _db.SaveChangesAsync();
+        }
     }
 }
